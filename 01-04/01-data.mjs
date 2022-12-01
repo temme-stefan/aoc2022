@@ -13,7 +13,7 @@ export const example = `1000
 
 10000`;
 
-export const firststar = `5474
+export const stardata = `5474
 4920
 5381
 8650

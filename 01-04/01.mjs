@@ -1,19 +1,14 @@
-import {example, firststar} from "./01-data.mjs";
+import {example, stardata} from "./01-data.mjs";
 
 
-const data = example;
-const result = data.split("\n").reduce(({max, current}, line) => {
-    if (line == "") {
-        current = 0;
-    } else {
-        current += parseInt(line);
-        if (current > max) {
-            max = current;
-        }
-    }
-    return {
-        max, current
-    }
-}, {max: 0, current: 0})
+const data = stardata;
 
-console.log("Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?", result.max);
+const allElves = data.split("\n\n")
+    .map(elf => elf.split("\n")
+        .reduce((a, b) => parseInt(b) + a, 0));
+allElves.sort((a, b) => Math.sign(b - a));
+console.log("⭐ Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?", allElves[0]);
+
+const firstThreeSum = allElves.reduce((a, b, i) => i < 3 ? a + b : a);
+console.log("⭐⭐ Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?", firstThreeSum);
+
