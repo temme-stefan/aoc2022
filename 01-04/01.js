@@ -1,4 +1,4 @@
-import {example, stardata} from "./01-data.mjs";
+import {example, stardata} from "./01-data.js";
 
 
 const data = stardata;

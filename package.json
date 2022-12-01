@@ -1,0 +1,12 @@
+{
+  "name": "aoc2022",
+  "version": "1.0.0",
+  "description": "AdventOfCode 2022 https://adventofcode.com/2022",
+  "type": "module",
+  "keywords": [],
+  "author": "Stefan Temme",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "createDay": "node ./scripts/createDay.js"
+  }
+}
