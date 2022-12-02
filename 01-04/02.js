@@ -1,6 +1,6 @@
 import {example, stardata} from "./02-data.js";
 
-const data = stardata;
+const data = stardata.split("\n");
 
 const scores = new Map(["A", "B", "C"].map((other, i) => ["X", "Y", "Z"].map((own, j) => {
     const key = `${other} ${own}`;
@@ -20,9 +20,27 @@ const scores = new Map(["A", "B", "C"].map((other, i) => ["X", "Y", "Z"].map((ow
     return [key, score];
 })).flat());
 
-const total = data.split("\n").reduce((a,b)=>a+scores.get(b) ,0);
+const total = data.reduce((a,b)=>a+scores.get(b) ,0);
 
-console.log(scores);
 console.log("⭐ What would your total score be if everything goes exactly according to your strategy guide?", total);
 
-console.log("⭐⭐ ");
+const correctScores = new Map(["A", "B", "C"].map((other, i) => ["X", "Y", "Z"].map((strategie) => {
+    const key = `${other} ${strategie}`;
+    let score = 1; //offset
+    switch (strategie) {
+        case "X":
+            score += (i+2)%3;
+            break;
+        case "Y":
+            score += i+3;
+            break;
+        case "Z":
+            score += (i+1)%3+6;
+            break;
+
+    }
+    return [key, score];
+})).flat());
+
+const correctTotal = data.reduce((a,b)=>a+correctScores.get(b) ,0);
+console.log("⭐⭐ Following the Elf's instructions for the second column, what would your total score be if everything goes exactly according to your strategy guide?", correctTotal);
