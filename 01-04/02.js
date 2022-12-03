@@ -1,4 +1,5 @@
 import {example, stardata} from "./02-data.js";
+import {sumNumbers} from "../reusable/reducer.js";
 
 const data = stardata.split("\n");
 
@@ -20,7 +21,7 @@ const scores = new Map(["A", "B", "C"].map((other, i) => ["X", "Y", "Z"].map((ow
     return [key, score];
 })).flat());
 
-const total = data.reduce((a,b)=>a+scores.get(b) ,0);
+const total = data.map(a=>scores.get(a)).reduce(sumNumbers);
 
 console.log("⭐ What would your total score be if everything goes exactly according to your strategy guide?", total);
 
@@ -42,5 +43,5 @@ const correctScores = new Map(["A", "B", "C"].map((other, i) => ["X", "Y", "Z"].
     return [key, score];
 })).flat());
 
-const correctTotal = data.reduce((a,b)=>a+correctScores.get(b) ,0);
+const correctTotal = data.map(a=>correctScores.get(a)).reduce(sumNumbers);
 console.log("⭐⭐ Following the Elf's instructions for the second column, what would your total score be if everything goes exactly according to your strategy guide?", correctTotal);
