@@ -16,15 +16,15 @@ const getCompartments = (backpack)=>[backpack.substring(0,backpack.length/2),bac
 
 const prioritySum = data.map(backpack=>getPriority(getDuplicate(getCompartments(backpack)))).reduce(sumNumbers);
 
-const groups = data.reduce((gr,row)=>{
-    if(gr[0].length<3){
-        gr[0].push(row);
+const groups = data.reduce((gr,row,i)=>{
+    if(i%3!=0){
+        gr[gr.length-1].push(row);
     }
     else{
-        gr.unshift([row]);
+        gr.push([row]);
     }
     return gr;
-},[[]])
+},[])
 
 const badgeSum = groups.map(rows=>getPriority(getDuplicate(rows))).reduce(sumNumbers);
 
