@@ -5,7 +5,7 @@ const data = stardata.split("\n");
 
 const getPriority= (c)=>c.toLowerCase()==c?(c.charCodeAt(0)-"a".charCodeAt(0)+1):(c.charCodeAt(0)-"A".charCodeAt(0)+27);
 
-const stringToSet = (compartment)=>[...compartment].reduce((set,letter)=>{set.add(letter); return set;},new Set());
+const stringToSet = (compartment)=>new Set(compartment);
 
 
 
