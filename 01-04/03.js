@@ -1,5 +1,5 @@
 import {example, stardata} from "./03-data.js";
-import {intersectSets, sumNumbers} from "../reusable/reducer.js";
+import {getRowGrouper, intersectSets, sumNumbers} from "../reusable/reducer.js";
 
 const data = stardata.split("\n");
 
@@ -16,15 +16,7 @@ const getCompartments = (backpack)=>[backpack.substring(0,backpack.length/2),bac
 
 const prioritySum = data.map(backpack=>getPriority(getDuplicate(getCompartments(backpack)))).reduce(sumNumbers);
 
-const groups = data.reduce((gr,row,i)=>{
-    if(i%3!=0){
-        gr[gr.length-1].push(row);
-    }
-    else{
-        gr.push([row]);
-    }
-    return gr;
-},[])
+const groups = data.reduce(getRowGrouper(3),[])
 
 const badgeSum = groups.map(rows=>getPriority(getDuplicate(rows))).reduce(sumNumbers);
 
