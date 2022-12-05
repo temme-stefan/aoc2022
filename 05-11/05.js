@@ -18,7 +18,7 @@ function parseMap() {
     return new Map(map.map(([key, ...data]) => [parseInt(key), data]));
 }
 
-const map = parseMap();
+const map1 = parseMap();
 
 function parseAction(s) {
     return JSON.parse("{" + s.replace("move", "\"move\":")
@@ -28,7 +28,11 @@ function parseAction(s) {
 
 const actions = actiondata.split("\n").map(parseAction);
 
-const doAction = ({move, from, to}) => {
+const getTopmost = (map) => {
+    return [...map.values()].map(col => col[col.length - 1]).join("");
+}
+
+const doAction1 = ({move, from, to},map) => {
     const fromCol = map.get(from);
     const toCol = map.get(to);
     for (let i = 0; i < move; i++) {
@@ -36,10 +40,29 @@ const doAction = ({move, from, to}) => {
     }
 }
 
-actions.forEach(doAction);
+actions.forEach(a=>doAction1(a,map1));
 
-const topmost = [...map.values()].map(col => col[col.length - 1]).join("");
+const topmost1 = getTopmost(map1);
 
-console.log("⭐ After the rearrangement procedure completes, what crate ends up on top of each stack?", topmost);
+console.log("⭐ After the rearrangement procedure completes, what crate ends up on top of each stack?", topmost1);
 
-console.log("⭐⭐ ");
+
+const map2 = parseMap();
+
+const doAction2 = ({move, from, to},map) => {
+    const fromCol = map.get(from);
+    const toCol = map.get(to);
+    const temp = [];
+    for (let i = 0; i < move; i++) {
+        temp.push(fromCol.pop());
+    }
+    for (let i = 0; i < move; i++) {
+        toCol.push(temp.pop());
+    }
+}
+
+actions.forEach(a=>doAction2(a,map2));
+
+const topmost2 = getTopmost(map2);
+
+console.log("⭐⭐ After the rearrangement procedure completes, what crate ends up on top of each stack?",topmost2);
