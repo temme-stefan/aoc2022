@@ -2,18 +2,26 @@ import {example, stardata} from "./06-data.js";
 
 const data = stardata.split("\n");
 
-const test = (s)=>new Set(s).size==4;
+const test = (s, size) => new Set(s).size == size;
 
-const result = data.map(s=>{
-    for (let i =0;i<s.length-4;i++){
-        if (test(s.substring(i,i+4))){
-            return i+4;
+const findFirstNDistinctLetters = (s, size) => {
+    for (let i = 0; i < s.length - size; i++) {
+        if (test(s.substring(i, i + size), size)) {
+            return i + size;
         }
     }
     return -1;
+}
+
+const result = data.map(s => {
+    return findFirstNDistinctLetters(s, 4);
 })
 
 
 console.log("⭐ How many characters need to be processed before the first start-of-packet marker is detected?", result);
 
-console.log("⭐⭐ ");
+const result2 = data.map(s => {
+    return findFirstNDistinctLetters(s, 14);
+})
+
+console.log("⭐⭐ How many characters need to be processed before the first start-of-message marker is detected?",result2);
