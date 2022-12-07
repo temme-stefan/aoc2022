@@ -1,5 +1,7 @@
 export const sumNumbers = (a, b) => a + b;
 
+export const minNumber = (a, b) => Math.min(a, b);
+
 export const intersectSets = (a, b) => new Set([...a].filter(c => b.has(c)));
 
 export const getRowGrouper = (n) => (a, l, i) => {
