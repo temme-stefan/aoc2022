@@ -1,6 +1,7 @@
 import {example, stardata} from "./07-data.js";
 import {minNumber, sumNumbers} from "../reusable/reducer.js";
 
+
 class FSElement {
 
     /**
@@ -20,9 +21,14 @@ class FSElement {
     constructor(name) {
         this.name = name;
     }
+
+    toString(){
+        return this.name;
+    }
 }
 
 class File extends FSElement {
+    static formatter = new Intl.NumberFormat("de-de");
 
     /**
      * @type number
@@ -37,6 +43,10 @@ class File extends FSElement {
     constructor(size, name) {
         super(name);
         this.size = size;
+    }
+
+    toString() {
+        return `${super.toString()} (file, size=${File.formatter.format(this.size)})`;
     }
 }
 
@@ -53,6 +63,10 @@ class Dir extends FSElement {
         this.content.set(newElement.name, newElement);
         newElement.parent = this;
     }
+
+    toString() {
+        return `${super.toString()} (dir)`;
+    }
 }
 
 /**
@@ -63,13 +77,12 @@ const getRootFS = () => {
     root.parent = root;
     return root;
 }
-const formatter = new Intl.NumberFormat("de-de");
+
 /**
  * @param data {string[]};
  * @returns {Dir}
  */
-const processData = (data) => {
-    const fs = getRootFS();
+const processData = (data,fs) => {
     let current = fs;
     data.forEach(row => {
         const step = row.split(" ");
@@ -94,14 +107,10 @@ const processData = (data) => {
                     current.addElement(new Dir(step[1]));
                 }
             } else {
-                if (current.content.has(step[1])) {
-                    console.warn('file overwrite');
-                }
                 current.addElement(new File(parseInt(step[0]), step[1]));
             }
         }
     })
-    return fs;
 }
 
 
@@ -110,14 +119,10 @@ const processData = (data) => {
  */
 const printFS = (fs) => {
     const printElement = (e, level = 0, buffer = []) => {
-        const parts = [Array.from({length: level}).map(_ => " ").join(""), "-", e.name];
+        const parts = [Array.from({length: level}).map(_ => " ").join(""), "-", e.toString()];
+        buffer.push(parts.join(" "));
         if (e instanceof Dir) {
-            parts.push("(dir)")
-            buffer.push(parts.join(" "));
             e.content.forEach(el => printElement(el, level + 1, buffer));
-        } else {
-            parts.push(`(file, size=${formatter.format(e.size)} )`)
-            buffer.push(parts.join(" "));
         }
         return buffer;
     }
@@ -126,9 +131,11 @@ const printFS = (fs) => {
 
 const data = stardata.split("\n");
 
-const fs = processData(data);
+const fs = getRootFS();
 
-// printFS(fs);
+processData(data,fs);
+
+printFS(fs);
 
 /**
  * @type {Map<string, number>}
@@ -154,7 +161,6 @@ const getSize = (fs, path = []) => {
     }
 }
 getSize(fs);
-// console.log(dirSizes)
 
 const result = [...dirSizes.values()].filter(x => x <= 100000).reduce(sumNumbers, 0);
 
@@ -166,7 +172,6 @@ const needed = 30000000;
 const available = total - dirSizes.get("/");
 const toBeDeletedMin = needed - available;
 
-// console.log(`total: ${formatter.format(total)},needed:${formatter.format(needed)},available:${formatter.format(available)},toBeDeletedMin:${formatter.format(toBeDeletedMin)}`);
 
 const toBeDeletedSize = [...dirSizes.values()].filter(x => x > toBeDeletedMin).reduce(minNumber, dirSizes.get("/"));
 
