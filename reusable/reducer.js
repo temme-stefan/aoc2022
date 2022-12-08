@@ -1,6 +1,7 @@
 export const sumNumbers = (a, b) => a + b;
-
+export const mulNumbers = (a, b) => a * b;
 export const minNumber = (a, b) => Math.min(a, b);
+export const maxNumber = (a, b) => Math.max(a, b);
 
 export const intersectSets = (a, b) => new Set([...a].filter(c => b.has(c)));
 
