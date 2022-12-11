@@ -1,0 +1,7 @@
+main{
+    grid-area: main;
+}
+
+footer{
+    grid-area: footer;
+}

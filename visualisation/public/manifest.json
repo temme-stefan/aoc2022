@@ -1,0 +1,10 @@
+{
+  "short_name": "AoC 2022",
+  "name": "Visualisation Advent of Code 2022 https://adventofcode.com/2022",
+  "icons": [
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
