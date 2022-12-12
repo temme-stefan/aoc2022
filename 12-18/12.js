@@ -58,7 +58,7 @@ const {nodes, start, end} = createGraph(data);
 
 console.log("⭐ What is the fewest steps required to move from your current position to the location that should get the best signal?",shortestPath(start,end,nodes));
 
-
+//Could do with a single run, inverting edge direction and going from end and stop at first a.... but it runs...
 const shortestStart = [...nodes.entries()].filter(([key,value])=>value.elevation==0).map(([key,value])=>shortestPath(key,end,nodes)).reduce(minNumber);
 
 console.log("⭐⭐ What is the fewest steps required to move starting from any square with elevation a to the location that should get the best signal?", shortestStart);
