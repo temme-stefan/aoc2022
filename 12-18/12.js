@@ -1,4 +1,5 @@
 import {example, stardata} from "./12-data.js";
+import {minNumber} from "../reusable/reducer.js";
 
 const createGraph = (data) => {
     let start, end;
@@ -35,7 +36,6 @@ const createGraph = (data) => {
 }
 
 const shortestPath = (start,end,nodes)=>{ //modified BFS
-    const visited = new Set();
     const depthMap = new Map([[start,0]]);
     const queue = [start];
     while (queue.length>0 && !depthMap.has(end)){
@@ -48,7 +48,7 @@ const shortestPath = (start,end,nodes)=>{ //modified BFS
             }
         })
     }
-    return depthMap.get(end);
+    return depthMap.get(end) ?? Number.POSITIVE_INFINITY;
 }
 
 const data = stardata;
@@ -58,4 +58,7 @@ const {nodes, start, end} = createGraph(data);
 
 console.log("⭐ What is the fewest steps required to move from your current position to the location that should get the best signal?",shortestPath(start,end,nodes));
 
-console.log("⭐⭐ ");
+
+const shortestStart = [...nodes.entries()].filter(([key,value])=>value.elevation==0).map(([key,value])=>shortestPath(key,end,nodes)).reduce(minNumber);
+
+console.log("⭐⭐ What is the fewest steps required to move starting from any square with elevation a to the location that should get the best signal?", shortestStart);
