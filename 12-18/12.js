@@ -7,12 +7,15 @@ const createGraph = (data) => {
     const getElevetaion = (c) => {
         return (c === "S" ? "a" : c === "E" ? "z" : c).charCodeAt(0) - "a".charCodeAt(0);
     }
+
+    const key = (x,y)=>`${x}_${y}`;
+
     const rows = data.split("\n").map((r, i) => [...r].map((c, j) => {
         if (c === "S") {
-            start = `${i}_${j}`;
+            start = key(i,j);
         }
         if (c === "E") {
-            end = `${i}_${j}`;
+            end = key(i,j);
         }
         return getElevetaion(c);
     }));
@@ -21,11 +24,11 @@ const createGraph = (data) => {
         const edges = [[i, j + 1], [i, j - 1], [i - 1, j], [i + 1, j]].filter(([x, y]) => {
             if (x >= 0 && x < rows.length && y >= 0 && y < r.length) {
                 const neighbour = rows[x][y];
-                return neighbour <= c + 1;
+                return neighbour >= c - 1;
             }
             return false
-        }).map(([x, y]) => `${x}_${y}`);
-        return [`${i}_${j}`, {
+        }).map(([x, y]) => key(x,y));
+        return [key(i,j), {
             i,
             j,
             elevation: c,
@@ -35,30 +38,34 @@ const createGraph = (data) => {
     return {nodes, start, end};
 }
 
-const shortestPath = (start,end,nodes)=>{ //modified BFS
-    const depthMap = new Map([[start,0]]);
+const shortestPath = (start, testend, nodes) => { //modified BFS
+    const depthMap = new Map([[start, 0]]);
     const queue = [start];
-    while (queue.length>0 && !depthMap.has(end)){
+    while (queue.length > 0) {
         const current = queue.shift();
         const childdepth = 1 + depthMap.get(current);
-        nodes.get(current).edges.forEach(edge=>{
-            if (!depthMap.has(edge)){ // if it has it is a Back edge --> already in queue/visited --> do nothing
-                depthMap.set(edge,childdepth);
-                queue.push(edge)
+        for (let edge of nodes.get(current).edges) {
+            if (testend(edge)) {
+                return childdepth;
+            } else {
+                if (!depthMap.has(edge)) { // if it has it is a Back edge --> already in queue/visited --> do nothing
+                    depthMap.set(edge, childdepth);
+                    queue.push(edge)
+                }
             }
-        })
+        }
     }
-    return depthMap.get(end) ?? Number.POSITIVE_INFINITY;
+    return Number.POSITIVE_INFINITY;
 }
 
 const data = stardata;
 
 const {nodes, start, end} = createGraph(data);
 
+const shortestPathFromStart = shortestPath(end, s => s == start, nodes);
 
-console.log("⭐ What is the fewest steps required to move from your current position to the location that should get the best signal?",shortestPath(start,end,nodes));
+console.log("⭐ What is the fewest steps required to move from your current position to the location that should get the best signal?", shortestPathFromStart);
 
-//Could do with a single run, inverting edge direction and going from end and stop at first a.... but it runs...
-const shortestStart = [...nodes.entries()].filter(([key,value])=>value.elevation==0).map(([key,value])=>shortestPath(key,end,nodes)).reduce(minNumber);
+const shortestPathFromAnyA = shortestPath(end,s=>nodes.get(s).elevation==0,nodes);
 
-console.log("⭐⭐ What is the fewest steps required to move starting from any square with elevation a to the location that should get the best signal?", shortestStart);
+console.log("⭐⭐ What is the fewest steps required to move starting from any square with elevation a to the location that should get the best signal?", shortestPathFromAnyA);
