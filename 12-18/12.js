@@ -1,5 +1,4 @@
 import {example, stardata} from "./12-data.js";
-import {minNumber} from "../reusable/reducer.js";
 
 const createGraph = (data) => {
     let start, end;
