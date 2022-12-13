@@ -8,9 +8,9 @@ const CustomControlls = ()=>{
     const ref = useRef<OrbitControlsImpl>(null);
 
     useEffect(()=> {
-        camera.position.set(0, 1.8, 4);
+        camera.position.set(0, 50, 0);
         ref.current?.update();
-    });
+    },[camera]);
 
     return (
         <OrbitControls makeDefault enablePan={false} target={[0,0,0]} ref={ref}/>
