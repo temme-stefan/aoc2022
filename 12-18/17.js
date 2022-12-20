@@ -62,7 +62,7 @@ function moveRight(unit) {
 function canMoveDown(stack, unit, intersectionlevel) {
     let stackmoveable = true;
     for (let i = 0; i < intersectionlevel && stackmoveable; i++) {
-        const sRow = stack[stack.length - intersectionlevel + i - 1];
+        const sRow = stack[stack.length - intersectionlevel + i];
         const uRow = unit[unit.length - 1 - i];
         stackmoveable = uRow.every((c, j) => !c || sRow && !sRow[j]);
     }
@@ -81,8 +81,8 @@ function union(stack, unit, intersectionlevel) {
             sRow[j] = sRow[j] || uRow[j];
         }
     }
-    for (let i = intersectionlevel;i<unit.length;i++){
-        stack.push(unit[unit.length-i-1]);
+    for (let i = intersectionlevel; i < unit.length; i++) {
+        stack.push(unit[unit.length - i - 1]);
     }
 }
 
@@ -100,7 +100,7 @@ function dropUnit(stack, unit, steam) {
                 moveRight(unit);
             }
         }
-        if (canMoveDown(stack, unit, intersectionlevel+1)) {
+        if (canMoveDown(stack, unit, intersectionlevel + 1)) {
             intersectionlevel++;
         } else {
             union(stack, unit, intersectionlevel);
@@ -109,8 +109,8 @@ function dropUnit(stack, unit, steam) {
     }
 }
 
-function printStack(stack){
-    console.log([...stack].reverse().map(row=>"|"+row.map(c=>c?"#":".").join("")+"|").join("\n")+"\n+-------+");
+function printStack(stack) {
+    console.log([...stack].reverse().map(row => "|" + row.map(c => c ? "#" : ".").join("") + "|").join("\n") + "\n+-------+");
 }
 
 const data = example;
@@ -134,7 +134,7 @@ const parts = `####
 const width = 7;
 const leftedge = 2;
 const bottom = 3;
-const rocks = 5//2022;
+const rocks = 2022;
 
 const partgen = partGenerator(parts, width, leftedge, bottom, rocks)
 const steam = gasSteam(data);
@@ -147,6 +147,6 @@ while (!current.done) {
 }
 
 
-console.log("⭐ How many units tall will the tower of rocks be after 2022 rocks have stopped falling?" );
+console.log("⭐ How many units tall will the tower of rocks be after 2022 rocks have stopped falling?",stack.length);
 
 console.log("⭐⭐ ");
