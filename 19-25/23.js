@@ -137,36 +137,68 @@ function parseData(data) {
 }
 
 
-const data = example;
+const data = stardata;
 
-let elves = parseData(data);
-let moved = true;
-const dir = [0, 1, 2, 3];
-while (moved) {
-    Cell.printCells(elves);
-    const elvesSet = new Set(elves);
-    const moves = elves.map(e => e.move(dir, elvesSet));
-    const targets = new Set();
-    const noTargets = new Set();
-    moves.forEach((proposal) => {
-        if (proposal) {
-            if (!targets.has(proposal)) {
-                targets.add(proposal);
-            } else {
-                noTargets.add(proposal);
+function partOne() {
+    let elves = parseData(data);
+    let moved = true;
+    const dir = [0, 1, 2, 3];
+    let i = 0;
+    while (moved && i<10) {
+        // console.log(i);
+        // Cell.printCells(elves);
+        i++;
+        const elvesSet = new Set(elves);
+        const moves = elves.map(e => e.move(dir, elvesSet));
+        const targets = new Set();
+        const noTargets = new Set();
+        moves.forEach((proposal) => {
+            if (proposal) {
+                if (!targets.has(proposal)) {
+                    targets.add(proposal);
+                } else {
+                    noTargets.add(proposal);
+                }
             }
-        }
-    });
-    moved = targets.size>0 && [...targets].some(c => !noTargets.has(c));
-    elves = elves.map((e, i) => moves[i] && !noTargets.has(moves[i]) ? moves[i] : e);
-    dir.push(dir.shift());
+        });
+        moved = targets.size > 0 && [...targets].some(c => !noTargets.has(c));
+        elves = elves.map((e, i) => moves[i] && !noTargets.has(moves[i]) ? moves[i] : e);
+        dir.push(dir.shift());
+    }
+
+    const result = Cell.emptyCells(elves);
+    return result;
 }
 
-console.log(Cell.minMax(elves))
-Cell.printCells(elves);
-const result = Cell.emptyCells(elves);
 
 
-console.log("⭐ Simulate the Elves' process and find the smallest rectangle that contains the Elves after 10 rounds. How many empty ground tiles does that rectangle contain?",result);
-
-console.log("⭐⭐ ");
+console.log("⭐ Simulate the Elves' process and find the smallest rectangle that contains the Elves after 10 rounds. How many empty ground tiles does that rectangle contain?",partOne());
+function partTwo() {
+    let elves = parseData(data);
+    let moved = true;
+    const dir = [0, 1, 2, 3];
+    let i = 0;
+    while (moved) {
+        // console.log(i);
+        // Cell.printCells(elves);
+        i++;
+        const elvesSet = new Set(elves);
+        const moves = elves.map(e => e.move(dir, elvesSet));
+        const targets = new Set();
+        const noTargets = new Set();
+        moves.forEach((proposal) => {
+            if (proposal) {
+                if (!targets.has(proposal)) {
+                    targets.add(proposal);
+                } else {
+                    noTargets.add(proposal);
+                }
+            }
+        });
+        moved = targets.size > 0 && [...targets].some(c => !noTargets.has(c));
+        elves = elves.map((e, i) => moves[i] && !noTargets.has(moves[i]) ? moves[i] : e);
+        dir.push(dir.shift());
+    }
+    return i;
+}
+console.log("⭐⭐ Figure out where the Elves need to go. What is the number of the first round where no Elf moves?",partTwo());
